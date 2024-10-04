@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShopClothing.Data;
 using ShopClothing.Repositories;
+
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -81,6 +82,10 @@ builder.Services.AddAuthentication(option =>
 });
 // Add services Repository.
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+
 
 var app = builder.Build();
 

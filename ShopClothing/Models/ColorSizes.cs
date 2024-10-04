@@ -7,19 +7,22 @@ namespace ShopClothing.Models
         [Key]
         public Guid ColorSizesID { get; set; }
 
+        public int Quantity { get; set; }   
+
         // Foreign Key
         public Guid ColorID { get; set; }
 
-        public Guid ProductID { get; set; }
-
         public Guid SizeID { get; set; }
 
+        public Guid ProductID { get; set; }
 
         // Navigation Property
-        public Products products { get; set; }
 
+        public Products Product { get; set; }
         public Sizes sizes { get; set; }
-
         public Colors Color { get; set; }
+
+      
+
     }
 }

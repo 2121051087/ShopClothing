@@ -22,10 +22,13 @@ namespace ShopClothing.Models
         public DateTime UpdatedAt { get; set; }
         public int Quantity { get; set; }
 
-        // Foreign Key
+        // Foreign Key  
+        
         public Guid CategoryID { get; set; }
 
         // Navigation Property
         public Categories Category { get; set; }
+
+        public ICollection<ColorSizes> ColorSizes { get; set; }
     }
 }

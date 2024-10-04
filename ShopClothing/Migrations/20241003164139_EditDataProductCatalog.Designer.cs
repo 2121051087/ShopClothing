@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopClothing.Data;
 
@@ -11,9 +12,11 @@ using ShopClothing.Data;
 namespace ShopClothing.Migrations
 {
     [DbContext(typeof(ShopClothingContext))]
-    partial class ShopClothingContextModelSnapshot : ModelSnapshot
+    [Migration("20241003164139_EditDataProductCatalog")]
+    partial class EditDataProductCatalog
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

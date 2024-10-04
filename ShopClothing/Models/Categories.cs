@@ -12,5 +12,6 @@ namespace ShopClothing.Models
 
         public ICollection<Products> Products { get; set; }
 
+
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopClothing.Data;
 
@@ -11,9 +12,11 @@ using ShopClothing.Data;
 namespace ShopClothing.Migrations
 {
     [DbContext(typeof(ShopClothingContext))]
-    partial class ShopClothingContextModelSnapshot : ModelSnapshot
+    [Migration("20241001150003_EditDb")]
+    partial class EditDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -255,9 +258,6 @@ namespace ShopClothing.Migrations
                     b.Property<Guid>("ProductID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("SizeID")
                         .HasColumnType("uniqueidentifier");
 
@@ -339,6 +339,9 @@ namespace ShopClothing.Migrations
                     b.Property<string>("SizeName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("SizeID");
 

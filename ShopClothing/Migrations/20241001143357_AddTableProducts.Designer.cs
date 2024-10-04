@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopClothing.Data;
 
@@ -11,9 +12,11 @@ using ShopClothing.Data;
 namespace ShopClothing.Migrations
 {
     [DbContext(typeof(ShopClothingContext))]
-    partial class ShopClothingContextModelSnapshot : ModelSnapshot
+    [Migration("20241001143357_AddTableProducts")]
+    partial class AddTableProducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,6 +158,21 @@ namespace ShopClothing.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProductColorSize", b =>
+                {
+                    b.Property<Guid>("ProductID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SizeID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ProductID", "SizeID");
+
+                    b.HasIndex("SizeID");
+
+                    b.ToTable("ProductColorSize");
+                });
+
             modelBuilder.Entity("ShopClothing.Data.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -252,20 +270,12 @@ namespace ShopClothing.Migrations
                     b.Property<Guid>("ColorID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ProductID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("SizeID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ColorSizesID");
 
                     b.HasIndex("ColorID");
-
-                    b.HasIndex("ProductID");
 
                     b.HasIndex("SizeID");
 
@@ -340,6 +350,9 @@ namespace ShopClothing.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("SizeID");
 
                     b.ToTable("Sizes", (string)null);
@@ -396,17 +409,26 @@ namespace ShopClothing.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProductColorSize", b =>
+                {
+                    b.HasOne("ShopClothing.Models.Products", null)
+                        .WithMany()
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShopClothing.Models.ColorSizes", null)
+                        .WithMany()
+                        .HasForeignKey("SizeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ShopClothing.Models.ColorSizes", b =>
                 {
                     b.HasOne("ShopClothing.Models.Colors", "Color")
                         .WithMany("ColorSizes")
                         .HasForeignKey("ColorID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ShopClothing.Models.Products", "Product")
-                        .WithMany("ColorSizes")
-                        .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -417,8 +439,6 @@ namespace ShopClothing.Migrations
                         .IsRequired();
 
                     b.Navigation("Color");
-
-                    b.Navigation("Product");
 
                     b.Navigation("sizes");
                 });
@@ -440,11 +460,6 @@ namespace ShopClothing.Migrations
                 });
 
             modelBuilder.Entity("ShopClothing.Models.Colors", b =>
-                {
-                    b.Navigation("ColorSizes");
-                });
-
-            modelBuilder.Entity("ShopClothing.Models.Products", b =>
                 {
                     b.Navigation("ColorSizes");
                 });

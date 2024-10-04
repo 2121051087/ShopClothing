@@ -9,8 +9,7 @@ namespace ShopClothing.Models
 
         public string SizeName { get; set; }    
 
-        public int quantity { get; set; }
-
+      
         public ICollection<ColorSizes> ColorSizes { get; set; }
     }
 }
