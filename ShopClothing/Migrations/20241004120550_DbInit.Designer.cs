@@ -12,8 +12,8 @@ using ShopClothing.Data;
 namespace ShopClothing.Migrations
 {
     [DbContext(typeof(ShopClothingContext))]
-    [Migration("20241003164139_EditDataProductCatalog")]
-    partial class EditDataProductCatalog
+    [Migration("20241004120550_DbInit")]
+    partial class DbInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -233,9 +233,11 @@ namespace ShopClothing.Migrations
 
             modelBuilder.Entity("ShopClothing.Models.Categories", b =>
                 {
-                    b.Property<Guid>("CategoryID")
+                    b.Property<int>("CategoryID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
@@ -252,17 +254,17 @@ namespace ShopClothing.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ColorID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ColorID")
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("ProductID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ProductID")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("SizeID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("SizeID")
+                        .HasColumnType("int");
 
                     b.HasKey("ColorSizesID");
 
@@ -277,15 +279,13 @@ namespace ShopClothing.Migrations
 
             modelBuilder.Entity("ShopClothing.Models.Colors", b =>
                 {
-                    b.Property<Guid>("ColorID")
+                    b.Property<int>("ColorID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorID"));
 
                     b.Property<string>("ColorName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageColor")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -296,12 +296,14 @@ namespace ShopClothing.Migrations
 
             modelBuilder.Entity("ShopClothing.Models.Products", b =>
                 {
-                    b.Property<Guid>("ProductID")
+                    b.Property<int>("ProductID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
 
-                    b.Property<Guid>("CategoryID")
-                        .HasColumnType("uniqueidentifier");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductID"));
+
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -335,9 +337,11 @@ namespace ShopClothing.Migrations
 
             modelBuilder.Entity("ShopClothing.Models.Sizes", b =>
                 {
-                    b.Property<Guid>("SizeID")
+                    b.Property<int>("SizeID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SizeID"));
 
                     b.Property<string>("SizeName")
                         .IsRequired()

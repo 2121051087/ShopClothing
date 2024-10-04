@@ -10,15 +10,15 @@ namespace ShopClothing.Data
         {
         }
 
-        public DbSet<ShopClothing.Models.Categories> Categories { get; set; }
+        public DbSet<ShopClothing.Models.Categories>? Categories { get; set; }
 
-        public DbSet<ShopClothing.Models.Colors> Colors { get; set; }
+        public DbSet<ShopClothing.Models.Colors>? Colors { get; set; }
 
-        public DbSet<ShopClothing.Models.ColorSizes> ColorSizes { get; set; }
+        public DbSet<ShopClothing.Models.ColorSizes>? ColorSizes { get; set; }
 
-        public DbSet<ShopClothing.Models.Products> Products { get; set; }
+        public DbSet<ShopClothing.Models.Products>? Products { get; set; }
 
-        public DbSet<ShopClothing.Models.Sizes> Sizes { get; set; }
+        public DbSet<ShopClothing.Models.Sizes>? Sizes { get; set; }
 
 
         override protected void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,7 +31,6 @@ namespace ShopClothing.Data
                 entity.ToTable("Categories")
                       .HasKey(c => c.CategoryID);
 
-                // Nếu cần thêm các cấu hình cho bảng Categories thì có thể thêm tại đây
             });
          
 
@@ -44,9 +43,9 @@ namespace ShopClothing.Data
                       .HasKey(p => p.ProductID);
 
                 // Cấu hình quan hệ one-to-many
-                entity.HasOne(p => p.Category) // Mỗi Product thuộc về một Category
-                      .WithMany(c => c.Products) // Một Category có nhiều Products
-                      .HasForeignKey(p => p.CategoryID); // Đặt CategoryID làm khóa ngoại
+                entity.HasOne(p => p.Category) 
+                      .WithMany(c => c.Products)
+                      .HasForeignKey(p => p.CategoryID);
 
 
             });

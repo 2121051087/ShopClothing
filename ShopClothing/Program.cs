@@ -1,9 +1,10 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShopClothing.Data;
+using ShopClothing.Models;
 using ShopClothing.Repositories;
 
 using System.Text;
@@ -95,7 +96,21 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ShopClothingContext>();
+        Sizes.SeedDefaultSizes(context); // Gọi phương thức tạo dữ liệu mặc định
+        Colors.SeedDefaultColors(context);
+    }
+    catch (Exception ex)
+    {
+        // Handle exceptions (nếu cần)
+        Console.WriteLine(ex.Message);
+    }
+}
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

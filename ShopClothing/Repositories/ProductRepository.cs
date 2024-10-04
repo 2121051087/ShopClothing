@@ -33,7 +33,7 @@ namespace ShopClothing.Repositories
             {
                 var newProduct = new Products
                 {
-                    ProductID = Guid.NewGuid(),
+                   
 
                     ProductName = product.ProductName,
                     ProductDescription = product.ProductDescription,

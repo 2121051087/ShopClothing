@@ -27,7 +27,7 @@ namespace ShopClothing.Repositories
         {
            var newCategory = new Categories
            {
-               CategoryID = Guid.NewGuid(),
+              
                CategoryName = category.CategoryName
            };
 

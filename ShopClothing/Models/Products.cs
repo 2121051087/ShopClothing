@@ -5,7 +5,7 @@ namespace ShopClothing.Models
     public class Products
     {
         [Key]
-        public Guid ProductID { get; set; }
+        public int  ProductID { get; set; }
 
 
         public string ProductName { get; set; }
@@ -24,7 +24,7 @@ namespace ShopClothing.Models
 
         // Foreign Key  
         
-        public Guid CategoryID { get; set; }
+        public int CategoryID { get; set; }
 
         // Navigation Property
         public Categories Category { get; set; }
