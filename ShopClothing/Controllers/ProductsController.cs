@@ -21,6 +21,12 @@ namespace ShopClothing.Controllers
 
         public async Task<IActionResult> AddProduct( [FromForm] ProductDetailDTO product)
         {
+            //if (product.colorSizesDTO == null || !product.colorSizesDTO.Any())
+            //{
+            //    return BadRequest("Invalid product data.");
+               
+
+            //}
             try
             {
                 var result = await _repo.AddNewProductAsync(product);
@@ -29,7 +35,7 @@ namespace ShopClothing.Controllers
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message, " lỗi tại đây ");
-                throw; // Ném lại lỗi
+                throw; 
                 return StatusCode(500);
             }
         }

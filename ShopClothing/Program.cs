@@ -11,7 +11,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -102,12 +102,11 @@ using (var scope = app.Services.CreateScope())
     try
     {
         var context = services.GetRequiredService<ShopClothingContext>();
-        Sizes.SeedDefaultSizes(context); // Gọi phương thức tạo dữ liệu mặc định
+        Sizes.SeedDefaultSizes(context);
         Colors.SeedDefaultColors(context);
     }
     catch (Exception ex)
     {
-        // Handle exceptions (nếu cần)
         Console.WriteLine(ex.Message);
     }
 }

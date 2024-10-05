@@ -247,9 +247,11 @@ namespace ShopClothing.Migrations
 
             modelBuilder.Entity("ShopClothing.Models.ColorSizes", b =>
                 {
-                    b.Property<Guid>("ColorSizesID")
+                    b.Property<int>("ColorSizesID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorSizesID"));
 
                     b.Property<int>("ColorID")
                         .HasColumnType("int");

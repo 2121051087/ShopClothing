@@ -19,16 +19,16 @@ namespace ShopClothing.Models
         {
             if (!context.Sizes.Any())
             {
-                var sizeNames = new string[] { "X", "M","XL" ,"L" , "S"  };
+                var sizeNames = new string[] { "X", "M", "XL", "L", "S" };
 
                 var defaultSizes = new List<Sizes>();
-               
+
                 foreach (var size in sizeNames)
                 {
                     defaultSizes.Add(new Sizes
                     {
-                       
-                       SizeName = size,
+
+                        SizeName = size,
 
                     });
                 }
@@ -37,6 +37,6 @@ namespace ShopClothing.Models
                 context.SaveChanges();
             }
         }
-       
+
     }
 }

@@ -12,13 +12,23 @@ namespace ShopClothing.Data
 
         public double Price { get; set; }
 
+        [Required]
+        public int CategoryID { get; set; }
         
         public IFormFile? formFile { get; set; }
-        
-        public List<ColorSizes> colorSizes { get; set; }
+
+        [Required] 
+        public ICollection<ColorSidesDTO> colorSizesDTO { get; set; } = new List<ColorSidesDTO>();
 
     }
 
+    public class ColorSidesDTO 
+    {
+    
+        public int ColorID { get; set; }
+        public int SizeID { get; set; }
+        public int Quantity { get; set; }
+    }
 
    
 }

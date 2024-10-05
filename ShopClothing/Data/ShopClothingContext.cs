@@ -10,15 +10,15 @@ namespace ShopClothing.Data
         {
         }
 
-        public DbSet<ShopClothing.Models.Categories>? Categories { get; set; }
+        public DbSet<ShopClothing.Models.Categories> Categories { get; set; }
 
-        public DbSet<ShopClothing.Models.Colors>? Colors { get; set; }
+        public DbSet<ShopClothing.Models.Colors> Colors { get; set; }
 
-        public DbSet<ShopClothing.Models.ColorSizes>? ColorSizes { get; set; }
+        public DbSet<ShopClothing.Models.ColorSizes> ColorSizes { get; set; }
 
-        public DbSet<ShopClothing.Models.Products>? Products { get; set; }
+        public DbSet<ShopClothing.Models.Products> Products { get; set; }
 
-        public DbSet<ShopClothing.Models.Sizes>? Sizes { get; set; }
+        public DbSet<ShopClothing.Models.Sizes> Sizes { get; set; }
 
 
         override protected void OnModelCreating(ModelBuilder modelBuilder)
