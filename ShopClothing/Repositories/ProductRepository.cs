@@ -13,67 +13,58 @@ namespace ShopClothing.Repositories
             _context = context;
         }
 
-        public async Task<Products> AddNewProductAsync(ProductDetailDTO product)
+        public async Task<Products> AddNewProductAsync(ProductDetailDTO product, string? base64Image)
         {
-            string base64Image = null!;
-
-            if (product.formFile != null)
-            {
-                using (var memoryStream = new MemoryStream())
-                {
-                    await product.formFile.CopyToAsync(memoryStream);
-                    byte[] imageBytes = memoryStream.ToArray();
-                    base64Image = Convert.ToBase64String(imageBytes);
-                }
-            }
-
             try
             {
-                // Tạo mới sản phẩm
                 var newProduct = new Products
                 {
                     ProductName = product.ProductName,
                     ProductDescription = product.ProductDescription,
                     Price = product.Price,
-                    ImageProduct = base64Image,
-                    CategoryID = product.CategoryID 
+                    ImageProduct = base64Image!,
+                    CategoryID = product.CategoryID
                 };
 
-                
                 await _context.Products.AddAsync(newProduct);
                 await _context.SaveChangesAsync();
 
-              
-                if (product.colorSizesDTO != null && product.colorSizesDTO.Count > 0)
+                List<ColorSidesDTO> colorSizesDTO;
+                try
                 {
-                    var colorSizesList = new List<ColorSizes>(); 
-                    foreach (var item in product.colorSizesDTO)
-                    {
-                        var colorSizes = new ColorSizes
-                        {
-                            ColorSizesID = Guid.NewGuid(),
-                            ProductID = newProduct.ProductID,
-                            ColorID = item.ColorID,
-                            SizeID = item.SizeID,
-                            Quantity = item.Quantity
-                        };
-
-                        colorSizesList.Add(colorSizes); 
-                    }
-
-           
-                    await _context.ColorSizes.AddRangeAsync(colorSizesList);
-                    await _context.SaveChangesAsync(); 
+                    colorSizesDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ColorSidesDTO>>(product.colorSizesDTO);
                 }
-
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Lỗi khi chuyển đổi JSON: " + ex.Message);
+                    throw new Exception("Dữ liệu ColorSizesDTO không hợp lệ.");
+                }
+                foreach (var item in colorSizesDTO)
+                {
+                    var colorSizes = new ColorSizes
+                    {
+                        ProductID = newProduct.ProductID,
+                        ColorID = item.ColorID,
+                        SizeID = item.SizeID,
+                        Quantity = item.Quantity
+                    };
+                    await _context.ColorSizes.AddAsync(colorSizes);
+                }
+            
+                await _context.SaveChangesAsync();
+               
                 return newProduct;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message, "Error at this point");
+                Console.WriteLine(ex.Message);
                 throw;
             }
         }
+
+
+
+
 
         public Task<Products> UpdateProductAsync(Products product, Guid id)
         {
@@ -84,5 +75,7 @@ namespace ShopClothing.Repositories
         {
             throw new NotImplementedException();
         }
+
+       
     }
 }

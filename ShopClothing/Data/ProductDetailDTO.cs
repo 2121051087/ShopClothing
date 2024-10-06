@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ShopClothing.Data
 {
+
     public class ProductDetailDTO
     {
         
@@ -11,17 +12,19 @@ namespace ShopClothing.Data
         public string? ProductDescription { get; set; }
 
         public double Price { get; set; }
-
-        [Required]
         public int CategoryID { get; set; }
-        
-        public IFormFile? formFile { get; set; }
 
-        [Required] 
-        public ICollection<ColorSidesDTO> colorSizesDTO { get; set; } = new List<ColorSidesDTO>();
+        //public List<ColorSidesDTO> colorSizesDTO { get; set; } = new List<ColorSidesDTO>();
+
+       // public IFormFile ImageProduct { get; set; }
+
+        public string colorSizesDTO { get; set; }
+
+
 
     }
 
+   
     public class ColorSidesDTO 
     {
     

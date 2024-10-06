@@ -17,27 +17,28 @@ namespace ShopClothing.Controllers
         {
             _repo = repo;
         }
+
+
         [HttpPost]
-
-        public async Task<IActionResult> AddProduct( [FromForm] ProductDetailDTO product)
+        public async Task<IActionResult> AddProduct([FromForm] ProductDetailDTO product, IFormFile ImageProduct)
         {
-            //if (product.colorSizesDTO == null || !product.colorSizesDTO.Any())
-            //{
-            //    return BadRequest("Invalid product data.");
-               
+            string base64Image = null!;
+            if (ImageProduct != null)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await ImageProduct.CopyToAsync(memoryStream);
+                    byte[] fileBytes = memoryStream.ToArray();
+                    base64Image = Convert.ToBase64String(fileBytes);
 
-            //}
-            try
-            {
-                var result = await _repo.AddNewProductAsync(product);
-                return Ok(result);
+                }
+                List<ColorSidesDTO> colorSizesDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ColorSidesDTO>>(product.colorSizesDTO);
+
+                return Ok(await _repo.AddNewProductAsync(product, base64Image));
             }
-            catch(Exception ex)
-            {
-                Console.WriteLine(ex.Message, " lỗi tại đây ");
-                throw; 
-                return StatusCode(500);
-            }
+            return BadRequest();
         }
+
+
     }
 }
