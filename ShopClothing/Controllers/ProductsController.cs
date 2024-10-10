@@ -34,11 +34,31 @@ namespace ShopClothing.Controllers
                 }
                 List<ColorSidesDTO> colorSizesDTO = Newtonsoft.Json.JsonConvert.DeserializeObject<List<ColorSidesDTO>>(product.colorSizesDTO);
 
-                return Ok(await _repo.AddNewProductAsync(product, base64Image));
+                await _repo.AddNewProductAsync(product, base64Image);
+                return Ok(product);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteProductAsync(int id)
+        {
+            if(id != null)
+            {
+                await _repo.DeleteProductAsync(id);
+
+                return Ok();
             }
             return BadRequest();
         }
 
+        [HttpGet]
 
+        public async Task<IActionResult> GetAllProductAsync(string? search, double? from, double? to ,string? SortBy, string? categoryName, int page)
+        {
+            var products = await _repo.GetAllProductAsync(search ,from ,to,SortBy, categoryName, page);
+            return Ok(products);
+        }
     }
 }

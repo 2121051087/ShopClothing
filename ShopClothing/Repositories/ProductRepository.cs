@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using ShopClothing.Data;
 using ShopClothing.Models;
 
@@ -8,9 +9,12 @@ namespace ShopClothing.Repositories
     {
         private readonly ShopClothingContext _context;
 
+        public static int Page_Size { get; set; } = 5;
+
         public ProductRepository(ShopClothingContext context)
         {
             _context = context;
+
         }
 
         public async Task<Products> AddNewProductAsync(ProductDetailDTO product, string? base64Image)
@@ -62,20 +66,96 @@ namespace ShopClothing.Repositories
             }
         }
 
-
-
-
-
-        public Task<Products> UpdateProductAsync(Products product, Guid id)
+        public Task<Products> UpdateProductAsync(Products product, int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Guid> DeleteProductAsync(Guid id)
+        public async Task<int> DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            var product = await _context.Products.FindAsync(id);
+
+            if(product == null)
+            {
+                return 0;
+            }
+             _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
+
+            return id; 
+            
+        
         }
 
-       
+        public async Task<List<Products>> GetAllProductAsync(string? search, double? from, double? to, string? sortBy, string? categoryName, int page = 1)
+        {
+            var allProducts = _context.Products.AsQueryable();
+
+            #region Filtering
+
+            // Tìm kiếm theo tên sản phẩm hoặc ID
+            if (!string.IsNullOrEmpty(search))
+            {
+                allProducts = allProducts.Where(p => p.ProductName.Contains(search) || p.ProductID.ToString().Contains(search));
+            }
+
+            // Lọc theo danh mục
+            if (!string.IsNullOrEmpty(categoryName))
+            {
+                allProducts = from p in allProducts
+                              join c in _context.Categories
+                              on p.CategoryID equals c.CategoryID
+                              where c.CategoryName == categoryName
+                              select p;
+            }
+
+            // Lọc theo khoảng giá
+            if (from.HasValue)
+            {
+                allProducts = allProducts.Where(p => p.Price >= from.Value);
+            }
+
+            if (to.HasValue)
+            {
+                allProducts = allProducts.Where(p => p.Price <= to.Value);
+            }
+
+            #endregion
+
+            #region Sorting
+
+            // Sắp xếp theo tiêu chí
+            allProducts = sortBy switch
+            {
+                "Price" => allProducts.OrderBy(p => p.Price),
+                "PriceDesc" => allProducts.OrderByDescending(p => p.Price),
+                _ => allProducts.OrderBy(p => p.ProductID) // Mặc định sắp xếp theo ProductID
+            };
+
+            #endregion
+
+            #region Paging
+
+           
+            allProducts = allProducts.Skip((page - 1) * Page_Size).Take(Page_Size);
+           
+            #endregion
+
+            // Lấy danh sách sản phẩm
+            var result = await allProducts.Select(p => new Products
+            {
+                ProductID = p.ProductID,
+                ProductName = p.ProductName,
+                Price = p.Price,
+                CategoryID = p.CategoryID,
+                ColorSizes = p.ColorSizes
+            }).ToListAsync();
+
+            return result;
+        }
+
+
+
+      
     }
 }

@@ -8,9 +8,11 @@ namespace ShopClothing.Repositories
      
         public Task<Products> AddNewProductAsync(ProductDetailDTO product , string? base64Image );
 
-        public Task<Products> UpdateProductAsync(Products product, Guid id);
+        public Task<Products> UpdateProductAsync(Products product, int id);
 
-        public Task<Guid> DeleteProductAsync(Guid id);
+        public Task<int> DeleteProductAsync(int id);
+
+        public Task<List<Products>> GetAllProductAsync(string? search , double? from , double? to , string? SortBy, string? categoryName, int  page);
         
     }
 }
