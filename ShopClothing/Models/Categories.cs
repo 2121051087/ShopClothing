@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ShopClothing.Models
 {
@@ -7,9 +8,9 @@ namespace ShopClothing.Models
         [Key]
         public int CategoryID { get; set; }
 
-
         public string CategoryName { get; set; }
 
+        [JsonIgnore]
         public ICollection<Products> Products { get; set; }
 
 

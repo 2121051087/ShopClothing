@@ -12,7 +12,7 @@ using ShopClothing.Data;
 namespace ShopClothing.Migrations
 {
     [DbContext(typeof(ShopClothingContext))]
-    [Migration("20241004120550_DbInit")]
+    [Migration("20241012093959_DbInit")]
     partial class DbInit
     {
         /// <inheritdoc />
@@ -321,9 +321,6 @@ namespace ShopClothing.Migrations
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");

@@ -26,6 +26,8 @@ namespace ShopClothing.Repositories
                     ProductName = product.ProductName,
                     ProductDescription = product.ProductDescription,
                     Price = product.Price,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
                     ImageProduct = base64Image!,
                     CategoryID = product.CategoryID
                 };
@@ -145,8 +147,12 @@ namespace ShopClothing.Repositories
             var result = await allProducts.Select(p => new Products
             {
                 ProductID = p.ProductID,
+                ProductDescription =p.ProductDescription,
                 ProductName = p.ProductName,
                 Price = p.Price,
+                CreatedAt = p.CreatedAt,
+                UpdatedAt = p.UpdatedAt,
+                ImageProduct = p.ImageProduct,
                 CategoryID = p.CategoryID,
                 ColorSizes = p.ColorSizes
             }).ToListAsync();

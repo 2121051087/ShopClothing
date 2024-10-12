@@ -247,11 +247,9 @@ namespace ShopClothing.Migrations
 
             modelBuilder.Entity("ShopClothing.Models.ColorSizes", b =>
                 {
-                    b.Property<int>("ColorSizesID")
+                    b.Property<Guid>("ColorSizesID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ColorSizesID"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("ColorID")
                         .HasColumnType("int");
@@ -320,9 +318,6 @@ namespace ShopClothing.Migrations
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");

@@ -7,7 +7,7 @@ namespace ShopClothing.Models
     public class Sizes
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        
         public int SizeID { get; set; }
 
         public string SizeName { get; set; }    

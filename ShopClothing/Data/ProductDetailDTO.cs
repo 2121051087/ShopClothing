@@ -33,5 +33,7 @@ namespace ShopClothing.Data
         public int Quantity { get; set; }
     }
 
-   
+
+
+
 }

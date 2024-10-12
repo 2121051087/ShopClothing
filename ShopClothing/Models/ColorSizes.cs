@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace ShopClothing.Models
 {
@@ -18,8 +19,11 @@ namespace ShopClothing.Models
 
         // Navigation Property
 
+        [JsonIgnore]
         public Products Product { get; set; }
+        [JsonIgnore]
         public Sizes sizes { get; set; }
+        [JsonIgnore]
         public Colors Color { get; set; }
 
       

@@ -27,8 +27,8 @@ namespace ShopClothing.Repositories
         {
            var newCategory = new Categories
            {
-              
-               CategoryName = category.CategoryName
+               
+               CategoryName = category.CategoryName,
            };
 
            await _context.Categories.AddAsync(newCategory);

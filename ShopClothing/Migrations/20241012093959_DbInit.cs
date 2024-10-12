@@ -209,7 +209,6 @@ namespace ShopClothing.Migrations
                     ImageProduct = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     CategoryID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

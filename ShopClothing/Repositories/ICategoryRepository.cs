@@ -1,4 +1,5 @@
-﻿using ShopClothing.Models;
+﻿using ShopClothing.Data;
+using ShopClothing.Models;
 
 namespace ShopClothing.Repositories
 {

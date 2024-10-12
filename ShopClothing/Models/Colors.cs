@@ -8,7 +8,6 @@ namespace ShopClothing.Models
     public class Colors
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ColorID { get; set; }
 
         public string ColorName { get; set; }
