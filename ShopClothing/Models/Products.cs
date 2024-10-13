@@ -32,5 +32,8 @@ namespace ShopClothing.Models
         public Categories Category { get; set; }
 
         public ICollection<ColorSizes> ColorSizes { get; set; }
+
+        public ICollection<OrderDetails> OrderDetails { get; set; }
+
     }
 }

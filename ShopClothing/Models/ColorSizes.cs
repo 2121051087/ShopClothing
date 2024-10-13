@@ -26,7 +26,11 @@ namespace ShopClothing.Models
         [JsonIgnore]
         public Colors Color { get; set; }
 
-      
+        [JsonIgnore]
+        public ICollection<Cart_item> cart_Items { get; set; }
+
+        public ICollection<OrderDetails> OrderDetails { get; set; }
+
 
     }
 }

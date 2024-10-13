@@ -1,10 +1,10 @@
 ﻿namespace ShopClothing.Models
 {
-    public class Cart_item
+    public class OrderDetails
     {
-        public int Cart_itemID { get; set; }
+        public int OrderDetailID { get; set; }
 
-        public int CartID { get; set; }
+        public int OrderID { get; set; }
 
         public int ProductID { get; set; }
 
@@ -12,15 +12,17 @@
 
         public int Quantity { get; set; }
 
+        public double Price { get; set; }
+
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
 
-        // Navigation Property 
+        // Navigation Property  
         public Products Products { get; set; }
 
         public ColorSizes ColorSizes { get; set; }
 
-        public Carts Carts { get; set; }
+        public Orders Orders { get; set; }
     }
 }
