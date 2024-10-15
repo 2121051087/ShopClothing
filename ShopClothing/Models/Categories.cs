@@ -11,7 +11,7 @@ namespace ShopClothing.Models
         public string CategoryName { get; set; }
 
         [JsonIgnore]
-        public ICollection<Products> Products { get; set; }
+        public ICollection<Products> Products { get; set; } = new List<Products>();
 
 
     }

@@ -40,7 +40,8 @@ namespace ShopClothing.Data
                 entity.HasOne(p => p.Category)
                       .WithMany(c => c.Products)
                       .HasForeignKey(p => p.CategoryID)
-                      .OnDelete(DeleteBehavior.Restrict);
+                      .OnDelete(DeleteBehavior.Cascade);
+                     
             });
 
             // Cấu hình bảng Colors
@@ -76,7 +77,7 @@ namespace ShopClothing.Data
                 entity.HasOne(cs => cs.Product)
                       .WithMany(p => p.ColorSizes)
                       .HasForeignKey(cs => cs.ProductID)
-                      .OnDelete(DeleteBehavior.Restrict);
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             // Cấu hình bảng Orders
@@ -135,6 +136,9 @@ namespace ShopClothing.Data
                       .WithMany(cs => cs.cart_Items)
                       .HasForeignKey(ci => ci.ColorSizesID)
                       .OnDelete(DeleteBehavior.Restrict);
+                entity.HasOne(ci => ci.Products)
+                      .WithMany(p => p.CartItems)
+                      .HasForeignKey(ci => ci.ProductID);
             });
         }
     }

@@ -11,6 +11,6 @@ namespace ShopClothing.Repositories
 
         Task<Categories> UpdateCategory(Categories category , string id);
 
-        Task<Categories> DeleteCategory( string id);
+        Task DeleteCategory( int id);
     }
 }

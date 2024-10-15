@@ -1,4 +1,6 @@
-﻿namespace ShopClothing.Models
+﻿using System.Text.Json.Serialization;
+
+namespace ShopClothing.Models
 {
     public class OrderDetails
     {
@@ -19,6 +21,7 @@
         public DateTime UpdatedAt { get; set; }
 
         // Navigation Property  
+        [JsonIgnore]
         public Products Products { get; set; }
 
         public ColorSizes ColorSizes { get; set; }

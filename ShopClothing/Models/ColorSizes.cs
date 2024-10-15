@@ -28,7 +28,7 @@ namespace ShopClothing.Models
 
         [JsonIgnore]
         public ICollection<Cart_item> cart_Items { get; set; }
-
+        [JsonIgnore]
         public ICollection<OrderDetails> OrderDetails { get; set; }
 
 

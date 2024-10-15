@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopClothing.Data;
 
@@ -11,9 +12,11 @@ using ShopClothing.Data;
 namespace ShopClothing.Migrations
 {
     [DbContext(typeof(ShopClothingContext))]
-    partial class ShopClothingContextModelSnapshot : ModelSnapshot
+    [Migration("20241013112916_EditRelationshipFKProductAndCartItems")]
+    partial class EditRelationshipFKProductAndCartItems
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -598,7 +601,7 @@ namespace ShopClothing.Migrations
                     b.HasOne("ShopClothing.Models.Products", "Product")
                         .WithMany("ColorSizes")
                         .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("ShopClothing.Models.Sizes", "sizes")
@@ -657,7 +660,7 @@ namespace ShopClothing.Migrations
                     b.HasOne("ShopClothing.Models.Categories", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Category");

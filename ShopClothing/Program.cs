@@ -85,7 +85,7 @@ builder.Services.AddAuthentication(option =>
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-
+builder.Services.AddScoped<ICartRepository, CartsRepository>();
 
 
 var app = builder.Build();

@@ -33,7 +33,11 @@ namespace ShopClothing.Models
 
         public ICollection<ColorSizes> ColorSizes { get; set; }
 
-        public ICollection<OrderDetails> OrderDetails { get; set; }
+        [JsonIgnore]
+        public ICollection<OrderDetails> OrderDetails { get; set; } = new List<OrderDetails>();
+
+        [JsonIgnore]
+        public ICollection<Cart_item> CartItems { get; set; } = new List<Cart_item>();
 
     }
 }

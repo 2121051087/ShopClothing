@@ -40,8 +40,14 @@ namespace ShopClothing.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(Categories category ,string id)
         {
+            
             try
             {
+                if (id != category.CategoryID.ToString())
+                {
+                  var error =  "id sai hoặc category ko tồn tại";
+                    return BadRequest(error);
+                }
                 var result = await _categoryRepo.UpdateCategory(category,id);
                 return Ok(result);
             }
@@ -51,17 +57,19 @@ namespace ShopClothing.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCategory( string id)
+        public async Task<IActionResult> DeleteCategory(int id)
         {
             try
             {
-                var result = await _categoryRepo.DeleteCategory(id);
-                return Ok(result);
+                await _categoryRepo.DeleteCategory(id);
+                return Ok();
             }
             catch
             {
                 return StatusCode(500);
             }
+        
         }
+
     }
 }
