@@ -1,4 +1,6 @@
-﻿namespace ShopClothing.Models
+﻿using System.Text.Json.Serialization;
+
+namespace ShopClothing.Models
 {
     public class Cart_item
     {
@@ -17,10 +19,11 @@
         public DateTime UpdatedAt { get; set; }
 
         // Navigation Property 
+        [JsonIgnore]
         public Products Products { get; set; }
 
         public ColorSizes ColorSizes { get; set; }
-
+        [JsonIgnore]
         public Carts Carts { get; set; }
     }
 }

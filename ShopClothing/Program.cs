@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Models;
 using ShopClothing.Data;
 using ShopClothing.Models;
 using ShopClothing.Repositories;
-
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -76,17 +76,18 @@ builder.Services.AddAuthentication(option =>
     {
         ValidateIssuer = true,
         ValidateAudience = true,
-        ValidAudience = builder.Configuration["JWT:ValiAudience"],
+        ValidAudience = builder.Configuration["JWT:ValidAudience"],
         ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
     };
 });
+
 // Add services Repository.
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICartRepository, CartsRepository>();
-
+builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
@@ -112,6 +113,7 @@ using (var scope = app.Services.CreateScope())
 }
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

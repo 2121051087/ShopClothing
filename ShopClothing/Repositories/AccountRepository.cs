@@ -16,13 +16,15 @@ namespace ShopClothing.Repositories
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly ICartRepository _cartRepository;
 
-        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager)
+        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager,ICartRepository cartRepository)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
+            _cartRepository = cartRepository;
         }
 
 
@@ -37,10 +39,14 @@ namespace ShopClothing.Repositories
                 return string.Empty;
             }
 
+            // Tạo hoặc trả về CartID
+            var cart = await _cartRepository.GetOrCreateCartAsync(user.Id);
+
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, model.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier,user.Id)
             };
 
             var userRoles = await userManager.GetRolesAsync(user);
@@ -54,9 +60,10 @@ namespace ShopClothing.Repositories
             var token = new JwtSecurityToken(
                 issuer: configuration["JWT:ValidIssuer"],
                 audience: configuration["JWT:ValidAudience"],
-                expires: DateTime.Now.AddMinutes(20),
+                expires: DateTime.Now.AddMinutes(60),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha512Signature)
+                
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);

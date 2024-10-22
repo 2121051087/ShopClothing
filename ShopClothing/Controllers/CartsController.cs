@@ -1,5 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ShopClothing.Data;
+using ShopClothing.Helpers;
 using ShopClothing.Models;
 using ShopClothing.Repositories;
 
@@ -16,17 +19,24 @@ namespace ShopClothing.Controllers
             _repo = repo;
         }
 
-       
 
-        [HttpPost]
-        public async Task<ActionResult> AddNewCartAsync(Carts cart)
+        [HttpPost("add-to-cart")]
+        [Authorize(Roles =AppRole.Customer)]
+        public async Task<IActionResult> AddToCart([FromBody] CartItemDTO model )
         {
-            await _repo.AddCartAsync(cart);
-            return Ok(cart);
-
+            try
+            {
+                await _repo.AddItemToCartAsync(model);
+                return Ok("Sản phẩm đã được thêm vào giỏ hàng.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
-        
 
-        
+
+
+
     }
 }
