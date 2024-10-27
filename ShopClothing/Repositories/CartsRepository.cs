@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using ShopClothing.Data;
 using ShopClothing.Models;
 using System.Security.Claims;
@@ -96,8 +97,6 @@ namespace ShopClothing.Repositories
             await _context.SaveChangesAsync();
         }
 
-
-
         public async Task RemoveItemFromCartAsync(int cartItemId)
         {
            var cartItem = _context.CartItem.FirstOrDefault(c => c.Cart_itemID == cartItemId);
@@ -109,24 +108,6 @@ namespace ShopClothing.Repositories
             await _context.SaveChangesAsync();
         }
 
-        // update quantity cua san pham trong gio hang
-        public Task UpdateCartAsync(Carts cart)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task UpdateCartItemInCartAsync(Cart_item cartItem)
-        {
-           var ExistingCartItem = _context.CartItem.FirstOrDefault(c => c.Cart_itemID == cartItem.Cart_itemID);
-            if(ExistingCartItem != null)
-            {
-             ExistingCartItem.Quantity = cartItem.Quantity;
-             ExistingCartItem.UpdatedAt = DateTime.UtcNow;
-            _context.CartItem.Update(ExistingCartItem);
-                
-            }
-            await _context.SaveChangesAsync();
-        }
         private  bool CheckQuantity(Cart_item item)  
         {
             if (item.ColorSizesID == null)
@@ -143,21 +124,33 @@ namespace ShopClothing.Repositories
             return colorSizes.Quantity >= item.Quantity; 
         }
 
+        // -------------------------------------------------------
 
-
-
-        public Task DeleteCartAsync(int cartId)
+        public async Task<bool> UpdateCartItemAsync(int cartItemId, Dictionary<string, object> updates)
         {
-            throw new NotImplementedException();
+            var existingCartItem = await GetCartItemByIdAsync(cartItemId);
+            if (existingCartItem != null)
+            {
+                // Cập nhật trường Quantity nếu có trong updates
+                if (updates.ContainsKey("quantity"))
+                    existingCartItem.Quantity = Convert.ToInt32(updates["quantity"]);
+
+                // Cập nhật thời gian chỉnh sửa
+                existingCartItem.UpdatedAt = DateTime.UtcNow;
+
+                _context.CartItem.Update(existingCartItem);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
 
-        public Task<Carts> GetCartByIdAsync(int cartId)
+
+        public async Task<Cart_item> GetCartItemByIdAsync(int cartItemId)
         {
-            throw new NotImplementedException();
+            return await _context.CartItem.FindAsync(cartItemId);
         }
-        public Task<IEnumerable<Cart_item>> GetCartItemsAsync(int cartId)
-        {
-            throw new NotImplementedException();
-        }
+
+
     }
 }

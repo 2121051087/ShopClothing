@@ -7,13 +7,11 @@ namespace ShopClothing.Repositories
     public interface ICartRepository
     {
         // 
-       public Task<Carts> GetCartByIdAsync(int cartId);
-       public Task<Carts> GetOrCreateCartAsync(string userId);
-       public Task DeleteCartAsync(int cartId);
-       public Task<IEnumerable<Cart_item>> GetCartItemsAsync(int cartId);
-        // 
+       public Task<Cart_item> GetCartItemByIdAsync(int cartItemId);
   
-       public  Task UpdateCartAsync(Carts cart);
+       public Task<Carts> GetOrCreateCartAsync(string userId);
+     
+       public Task<bool> UpdateCartItemAsync(int cartItemId, Dictionary<string, object> updates);
        public Task AddItemToCartAsync(CartItemDTO model);
        public Task RemoveItemFromCartAsync(int cartItemId);
      

@@ -20,7 +20,7 @@ namespace ShopClothing.Controllers
         }
 
 
-        [HttpPost("add-to-cart")]
+        [HttpPost("add-item-to-cart")]
         [Authorize(Roles =AppRole.Customer)]
         public async Task<IActionResult> AddToCart([FromBody] CartItemDTO model )
         {
@@ -33,6 +33,33 @@ namespace ShopClothing.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+        [HttpDelete("remove-item-to-cart")]
+        [Authorize(Roles = AppRole.Customer)]
+        public async Task<IActionResult> RemoveItemToCart(int cartItemId)
+        {
+            try
+            {
+                await _repo.RemoveItemFromCartAsync(cartItemId);
+                return Ok("Sản phẩm đã được xóa khỏi giỏ hàng");
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPatch("{cartItemId}")]
+        [Authorize(Roles = AppRole.Customer)]
+        public async Task<IActionResult> UpdateCartItemInCartAsync(int cartItemId, [FromBody] Dictionary<string, object> updates)
+        {
+            var result = await _repo.UpdateCartItemAsync(cartItemId, updates);
+
+            if (result)
+            {
+                return Ok(new { Message = "Cart item updated successfully" });
+            }
+            return NotFound(new { Message = "Cart item not found" });
         }
 
 
