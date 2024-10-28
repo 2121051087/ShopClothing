@@ -27,8 +27,8 @@ namespace ShopClothing.Models
 
         // 
 
-        public ApplicationUser applicationUser { get; set;}
+        //public ApplicationUser applicationUser { get; set;} = new ApplicationUser();
 
-        public ICollection<OrderDetails> orderDetails { get; set; }
+        public ICollection<OrderDetails> orderDetails { get; set; } = new List<OrderDetails>();
     }
 }

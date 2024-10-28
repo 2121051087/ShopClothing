@@ -87,6 +87,7 @@ builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICartRepository, CartsRepository>();
+builder.Services.AddScoped<IOrderRepository, OrdersRepository>();
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

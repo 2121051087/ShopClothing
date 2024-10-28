@@ -5,6 +5,7 @@ using ShopClothing.Data;
 using ShopClothing.Helpers;
 using ShopClothing.Models;
 using ShopClothing.Repositories;
+using System.Security.Claims;
 
 namespace ShopClothing.Controllers
 {
@@ -13,10 +14,12 @@ namespace ShopClothing.Controllers
     public class CartsController : ControllerBase
     {
         private readonly ICartRepository _repo;
+        private readonly ClaimsPrincipal? _user;
 
-        public CartsController(ICartRepository repo)
+        public CartsController(ICartRepository repo, IHttpContextAccessor httpContextAccessor)
         {
             _repo = repo;
+            _user = httpContextAccessor.HttpContext?.User;
         }
 
 
@@ -61,8 +64,14 @@ namespace ShopClothing.Controllers
             }
             return NotFound(new { Message = "Cart item not found" });
         }
-
-
+        [HttpGet]
+        [Authorize(Roles = AppRole.Customer)]
+        public Task<Carts> GetOrCreateCartAsync()
+        {
+            var userIdClaim = _user.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = userIdClaim?.Value;
+            return _repo.GetOrCreateCartAsync(userId);
+        }
 
 
     }

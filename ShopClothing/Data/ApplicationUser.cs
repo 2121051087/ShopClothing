@@ -11,10 +11,7 @@ namespace ShopClothing.Data
 
         public string LastName { get; set; } = null!;
 
-        //public int CartID { get; set; } // This is a foreign key
-
-
-        //public ICollection<Carts> Cart { get; set; } = new List<Carts>();
+        
         
         public ICollection<Carts> carts { get; set; } = new List<Carts>();
 

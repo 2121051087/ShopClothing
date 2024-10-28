@@ -86,10 +86,10 @@ namespace ShopClothing.Data
                 entity.ToTable("Orders")
                       .HasKey(o => o.OrderID);
 
-                entity.HasOne(o => o.applicationUser)
-                      .WithMany(u => u.Orders)
-                      .HasForeignKey(o => o.UserID)
-                      .OnDelete(DeleteBehavior.Restrict);
+                //entity.HasOne(o => o.applicationUser)
+                //      .WithMany(u => u.Orders)
+                //      .HasForeignKey(o => o.UserID)
+                //      .OnDelete(DeleteBehavior.Restrict);
             });
 
             // Cấu hình bảng OrderDetails
@@ -121,25 +121,27 @@ namespace ShopClothing.Data
                       .HasKey(c => c.CartID);
             });
 
-            // Cấu hình bảng Cart_item
+            // Cấu hình bảng CartItem
             modelBuilder.Entity<ShopClothing.Models.Cart_item>(entity =>
             {
-                entity.ToTable("Cart_item")
+                entity.ToTable("Cart_item") // Cố định lại tên bảng
                       .HasKey(ci => ci.Cart_itemID);
 
                 entity.HasOne(ci => ci.Carts)
                       .WithMany(c => c.cart_Items)
                       .HasForeignKey(ci => ci.CartID)
-                      .OnDelete(DeleteBehavior.Restrict);
-
+                      .OnDelete(DeleteBehavior.Cascade); 
                 entity.HasOne(ci => ci.ColorSizes)
                       .WithMany(cs => cs.cart_Items)
                       .HasForeignKey(ci => ci.ColorSizesID)
-                      .OnDelete(DeleteBehavior.Restrict);
+                      .OnDelete(DeleteBehavior.Restrict); 
+
                 entity.HasOne(ci => ci.Products)
                       .WithMany(p => p.CartItems)
-                      .HasForeignKey(ci => ci.ProductID);
+                      .HasForeignKey(ci => ci.ProductID)
+                      .OnDelete(DeleteBehavior.Cascade); // Có thể dùng Cascade nếu muốn xóa tất cả CartItems khi Product bị xóa
             });
+
         }
     }
 }

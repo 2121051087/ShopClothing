@@ -14,6 +14,8 @@ namespace ShopClothing.Repositories
        public Task<bool> UpdateCartItemAsync(int cartItemId, Dictionary<string, object> updates);
        public Task AddItemToCartAsync(CartItemDTO model);
        public Task RemoveItemFromCartAsync(int cartItemId);
+
+       public  Task ClearCart();
      
     }
 }

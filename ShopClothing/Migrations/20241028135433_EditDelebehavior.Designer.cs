@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopClothing.Data;
 
@@ -11,9 +12,11 @@ using ShopClothing.Data;
 namespace ShopClothing.Migrations
 {
     [DbContext(typeof(ShopClothingContext))]
-    partial class ShopClothingContextModelSnapshot : ModelSnapshot
+    [Migration("20241028135433_EditDelebehavior")]
+    partial class EditDelebehavior
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -408,9 +411,6 @@ namespace ShopClothing.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -435,7 +435,7 @@ namespace ShopClothing.Migrations
 
                     b.Property<string>("UserID")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Ward")
                         .IsRequired()
@@ -443,7 +443,7 @@ namespace ShopClothing.Migrations
 
                     b.HasKey("OrderID");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("UserID");
 
                     b.ToTable("Orders", (string)null);
                 });
@@ -646,9 +646,13 @@ namespace ShopClothing.Migrations
 
             modelBuilder.Entity("ShopClothing.Models.Orders", b =>
                 {
-                    b.HasOne("ShopClothing.Data.ApplicationUser", null)
+                    b.HasOne("ShopClothing.Data.ApplicationUser", "applicationUser")
                         .WithMany("Orders")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("applicationUser");
                 });
 
             modelBuilder.Entity("ShopClothing.Models.Products", b =>

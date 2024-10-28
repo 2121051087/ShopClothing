@@ -20,8 +20,12 @@ namespace ShopClothing.Repositories
         // lay hoac tao gio hang moi
         public async Task<Carts> GetOrCreateCartAsync(string userId)
         {
-            var existingCart = await _context.Carts.FirstOrDefaultAsync(c => c.UserID == userId);
-            if(existingCart != null)
+            var existingCart = await _context.Carts
+                                                   .Include(c => c.cart_Items)
+                                                   .ThenInclude(ci => ci.Products)
+                                                   .FirstOrDefaultAsync(c => c.UserID == userId);
+
+            if (existingCart != null)
               {
                 return existingCart;
               }
@@ -54,7 +58,7 @@ namespace ShopClothing.Repositories
 
             // Tự động lấy CartID từ giỏ hàng của người dùng hoặc tạo mới nếu chưa có
             var cart = await GetOrCreateCartAsync(userId);
-
+            
             var existingCart = await _context.CartItem.Include(c => c.ColorSizes).FirstOrDefaultAsync(c => c.ProductID == model.ProductID && c.ColorSizesID == model.ColorSizesID);
 
 
@@ -151,6 +155,27 @@ namespace ShopClothing.Repositories
             return await _context.CartItem.FindAsync(cartItemId);
         }
 
+      
 
+        public async Task ClearCart()
+        {
+            var userIdClaim = _user.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = userIdClaim?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedAccessException("User is not authenticated.");
+            }
+
+         
+            var existCart = await _context.Carts.FirstOrDefaultAsync(c => c.UserID == userId);
+
+
+            var CartItem = _context.CartItem.Where(ci => ci.CartID == existCart.CartID);
+
+            _context.CartItem.RemoveRange(CartItem);
+
+            await _context.SaveChangesAsync();
+        }
     }
 }
