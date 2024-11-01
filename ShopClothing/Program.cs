@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShopClothing.Data;
+using ShopClothing.Infrastructure;
 using ShopClothing.Models;
 using ShopClothing.Repositories;
 using System.Security.Claims;
@@ -88,6 +89,7 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ICartRepository, CartsRepository>();
 builder.Services.AddScoped<IOrderRepository, OrdersRepository>();
+builder.Services.AddScoped<IUnitOfWork, ShopClothingUnitOfWork>();
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShopClothing.Data;
 using ShopClothing.Helpers;
+using ShopClothing.Infrastructure;
 using ShopClothing.Models;
 using ShopClothing.Repositories;
 
@@ -12,11 +13,11 @@ namespace ShopClothing.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderRepository _repo;
+        private readonly IUnitOfWork unitOfWork;
 
-        public OrdersController(IOrderRepository repo)
+        public OrdersController(IUnitOfWork unitOfWork)
         {
-            _repo = repo;
+            this.unitOfWork = unitOfWork;
         }
 
         [HttpPost("create-order")]
@@ -25,7 +26,12 @@ namespace ShopClothing.Controllers
         {
             try
             {
-                await _repo.CreateOrderAsync(model); 
+                await unitOfWork.OrderRepository.CreateOrderAsync(model);
+
+                await unitOfWork.CartRepository.ClearCartAsync();
+
+                await unitOfWork.SaveChangesAsync();
+
                 return Ok("Đơn hàng đã được tạo thành công.");
             }
             catch (Exception ex)

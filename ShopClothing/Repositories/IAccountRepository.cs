@@ -8,5 +8,7 @@ namespace ShopClothing.Repositories
         public Task<IdentityResult> SignUpAsync(SignUpModel model);
 
         public Task<string> SignInAsync(SignInModel model);
+
+        public string GetUserId();
     }
 }

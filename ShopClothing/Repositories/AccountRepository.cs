@@ -16,15 +16,18 @@ namespace ShopClothing.Repositories
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
+        //
         private readonly ICartRepository _cartRepository;
+        private readonly ClaimsPrincipal? _user;
 
-        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager,ICartRepository cartRepository)
+        public AccountRepository(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IConfiguration configuration, RoleManager<IdentityRole> roleManager,ICartRepository cartRepository, IHttpContextAccessor httpContextAccessor)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
             _cartRepository = cartRepository;
+            _user = httpContextAccessor.HttpContext?.User;
         }
 
 
@@ -90,6 +93,19 @@ namespace ShopClothing.Repositories
             }
 
             return result;
+        }
+
+
+        public string GetUserId()
+        {
+            var userIdClaim = _user.FindFirst(ClaimTypes.NameIdentifier);
+            var userId = userIdClaim?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new UnauthorizedAccessException("User is not authenticated.");
+            }
+            return userId;
         }
     }
 }

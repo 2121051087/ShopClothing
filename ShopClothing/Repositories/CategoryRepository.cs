@@ -26,7 +26,7 @@ namespace ShopClothing.Repositories
         public async Task<Categories> AddNewCategory(Categories category)
         {
            await _context.Categories.AddAsync(category);
-           await _context.SaveChangesAsync();
+           
            return category;
         }
 
@@ -34,7 +34,7 @@ namespace ShopClothing.Repositories
         {
           
            _context.Entry(category).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+          
             return category;
         }
 
@@ -46,7 +46,7 @@ namespace ShopClothing.Repositories
             if (deleteCategory != null)
             {
                _context.Categories.Remove(deleteCategory);
-                await _context.SaveChangesAsync();
+              
             }
 
         }

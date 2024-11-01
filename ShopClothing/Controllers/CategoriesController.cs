@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShopClothing.Data;
+using ShopClothing.Helpers;
+using ShopClothing.Infrastructure;
 using ShopClothing.Models;
 using ShopClothing.Repositories;
 
@@ -10,26 +13,35 @@ namespace ShopClothing.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ICategoryRepository _categoryRepo;
+    
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoriesController(ICategoryRepository repo)
+        public CategoriesController(IUnitOfWork unitOfWork)
         {
-            _categoryRepo = repo;
+            _unitOfWork = unitOfWork;
         }
         [HttpGet]
+        [Authorize(Roles = $"{AppRole.Admin},{AppRole.Customer}")]
         public async Task<IActionResult> GetAllCategory()
         {
 
-           var result = await _categoryRepo.GetAllCategories();
+           var result = await _unitOfWork.CategoryRepository.GetAllCategories();
+
+            await _unitOfWork.SaveChangesAsync();
+
             return Ok(result);
         }
 
         [HttpPost]
+        [Authorize(Roles = AppRole.Admin)]
         public async Task<IActionResult> AddCategory(Categories category)
         {
             try
             {
-                var result = await _categoryRepo.AddNewCategory(category);
+                var result = await _unitOfWork.CategoryRepository.AddNewCategory(category);
+
+                await _unitOfWork.SaveChangesAsync();
+
                 return Ok(result);
             }
             catch
@@ -38,6 +50,7 @@ namespace ShopClothing.Controllers
             }
         }
         [HttpPut("{id}")]
+        [Authorize(Roles = AppRole.Admin)]
         public async Task<IActionResult> UpdateCategory(Categories category ,string id)
         {
             
@@ -48,7 +61,9 @@ namespace ShopClothing.Controllers
                   var error =  "id sai hoặc category ko tồn tại";
                     return BadRequest(error);
                 }
-                var result = await _categoryRepo.UpdateCategory(category,id);
+                var result = await _unitOfWork.CategoryRepository.UpdateCategory(category,id);
+
+                await _unitOfWork.SaveChangesAsync();
                 return Ok(result);
             }
             catch
@@ -57,11 +72,14 @@ namespace ShopClothing.Controllers
             }
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = AppRole.Admin)]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             try
             {
-                await _categoryRepo.DeleteCategory(id);
+                await _unitOfWork.CategoryRepository.DeleteCategory(id);
+
+                await _unitOfWork.SaveChangesAsync();
                 return Ok();
             }
             catch

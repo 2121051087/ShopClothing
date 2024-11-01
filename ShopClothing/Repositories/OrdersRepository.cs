@@ -10,25 +10,20 @@ namespace ShopClothing.Repositories
         private readonly ShopClothingContext _context;
         private readonly ClaimsPrincipal? _user;
         private readonly ICartRepository _repo;
+        private readonly IAccountRepository _accountRepository;
 
-        public OrdersRepository(ShopClothingContext context, IHttpContextAccessor httpContextAccessor , ICartRepository repo)
+        public OrdersRepository(ShopClothingContext context, IHttpContextAccessor httpContextAccessor , ICartRepository repo , IAccountRepository accountRepository)
         {
             _context = context;
             _user = httpContextAccessor.HttpContext?.User;
             _repo = repo;
+            _accountRepository = accountRepository;
         }
 
      
         public async Task CreateOrderAsync(OrdersDTO model)
         {
-            var userIdClaim = _user.FindFirst(ClaimTypes.NameIdentifier);
-            var userId = userIdClaim?.Value;
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                throw new UnauthorizedAccessException("User is not authenticated.");
-            }
-
+           var userId = _accountRepository.GetUserId();
             // Set thông tin cơ bản cho đơn hàng
             var order = new Orders
             {
@@ -63,6 +58,11 @@ namespace ShopClothing.Repositories
                     throw new InvalidOperationException("Product not found.");
                 }
 
+                // tru so luong san pham khi tao don 
+                var colorSizes = await _context.ColorSizes.FirstOrDefaultAsync(cs => cs.ColorSizesID == cartItem.ColorSizesID);
+                colorSizes.Quantity -= cartItem.Quantity;
+                    
+
                 orderDetails.Add(new OrderDetails
                 {
                     OrderID = order.OrderID,
@@ -79,12 +79,7 @@ namespace ShopClothing.Repositories
 
             await _context.Orders.AddAsync(order);
 
-            // Xóa giỏ hàng sau khi tạo đơn hàng
-            await _repo.ClearCart();
-
-            // Lưu thay đổi
-            await _context.SaveChangesAsync();
-
+            
 
         }
 

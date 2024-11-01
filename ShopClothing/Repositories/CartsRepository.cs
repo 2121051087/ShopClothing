@@ -157,7 +157,7 @@ namespace ShopClothing.Repositories
 
       
 
-        public async Task ClearCart()
+        public async Task ClearCartAsync()
         {
             var userIdClaim = _user.FindFirst(ClaimTypes.NameIdentifier);
             var userId = userIdClaim?.Value;
@@ -175,7 +175,6 @@ namespace ShopClothing.Repositories
 
             _context.CartItem.RemoveRange(CartItem);
 
-            await _context.SaveChangesAsync();
         }
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ShopClothing.Data;
 using ShopClothing.Helpers;
+using ShopClothing.Infrastructure;
 using ShopClothing.Models;
 using ShopClothing.Repositories;
 using System.Security.Claims;
@@ -13,23 +14,21 @@ namespace ShopClothing.Controllers
     [ApiController]
     public class CartsController : ControllerBase
     {
-        private readonly ICartRepository _repo;
-        private readonly ClaimsPrincipal? _user;
+        private readonly IUnitOfWork unitOfWork;
 
-        public CartsController(ICartRepository repo, IHttpContextAccessor httpContextAccessor)
+        public CartsController( IUnitOfWork unitOfWork)
         {
-            _repo = repo;
-            _user = httpContextAccessor.HttpContext?.User;
+            this.unitOfWork = unitOfWork;
         }
 
 
         [HttpPost("add-item-to-cart")]
-        [Authorize(Roles =AppRole.Customer)]
+        [Authorize(Roles = $"{AppRole.Admin},{AppRole.Customer}")]
         public async Task<IActionResult> AddToCart([FromBody] CartItemDTO model )
         {
             try
             {
-                await _repo.AddItemToCartAsync(model);
+                await unitOfWork.CartRepository.AddItemToCartAsync(model);
                 return Ok("Sản phẩm đã được thêm vào giỏ hàng.");
             }
             catch (Exception ex)
@@ -38,12 +37,12 @@ namespace ShopClothing.Controllers
             }
         }
         [HttpDelete("remove-item-to-cart")]
-        [Authorize(Roles = AppRole.Customer)]
+        [Authorize(Roles = $"{AppRole.Admin},{AppRole.Customer}")]
         public async Task<IActionResult> RemoveItemToCart(int cartItemId)
         {
             try
             {
-                await _repo.RemoveItemFromCartAsync(cartItemId);
+                await unitOfWork.CartRepository.RemoveItemFromCartAsync(cartItemId);
                 return Ok("Sản phẩm đã được xóa khỏi giỏ hàng");
             }
             catch
@@ -56,7 +55,7 @@ namespace ShopClothing.Controllers
         [Authorize(Roles = AppRole.Customer)]
         public async Task<IActionResult> UpdateCartItemInCartAsync(int cartItemId, [FromBody] Dictionary<string, object> updates)
         {
-            var result = await _repo.UpdateCartItemAsync(cartItemId, updates);
+            var result = await unitOfWork.CartRepository.UpdateCartItemAsync(cartItemId, updates);
 
             if (result)
             {
@@ -65,12 +64,11 @@ namespace ShopClothing.Controllers
             return NotFound(new { Message = "Cart item not found" });
         }
         [HttpGet]
-        [Authorize(Roles = AppRole.Customer)]
+        [Authorize(Roles = $"{AppRole.Admin},{AppRole.Customer}")]
         public Task<Carts> GetOrCreateCartAsync()
         {
-            var userIdClaim = _user.FindFirst(ClaimTypes.NameIdentifier);
-            var userId = userIdClaim?.Value;
-            return _repo.GetOrCreateCartAsync(userId);
+            var userId = unitOfWork.AccountRepository.GetUserId();
+            return unitOfWork.CartRepository.GetOrCreateCartAsync(userId);
         }
 
 
