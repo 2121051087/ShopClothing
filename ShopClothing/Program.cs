@@ -4,9 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using ShopClothing.Data;
-using ShopClothing.Infrastructure;
+using ShopClothing.Infrastructure.Data;
+using ShopClothing.Infrastructure.Repositories;
+using ShopClothing.Infrastructure.Unit;
 using ShopClothing.Models;
-using ShopClothing.Repositories;
 using System.Security.Claims;
 using System.Text;
 

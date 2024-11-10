@@ -21,8 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
-    <Folder Include="Services\" />
+    <Folder Include="Infrastructure\Migrations\" />
+    <Folder Include="ShopClothing-API\Middlewares\" />
+    <Folder Include="ShopClothing-Aplication\Validators\" />
+    <Folder Include="ShopClothing-Aplication\Services\" />
   </ItemGroup>
 
 </Project>
